@@ -1,0 +1,36 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: frontend
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: default
+  
+  source:
+    repoURL: {{ .Values.global.repoURL }}
+    targetRevision: {{ .Values.global.targetRevision }}
+    path: charts/frontend
+    helm:
+      values: |
+        image:
+          repository: {{ .Values.global.repositories.frontend }}
+          tag: latest
+        
+        ingress:
+          enabled: true
+          host: frontend.{{ .Values.global.domain }}
+        
+        environment: {{ .Values.global.environment }}
+  
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: frontend
+  
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
