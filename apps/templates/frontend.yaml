@@ -20,7 +20,15 @@ spec:
         
         ingress:
           enabled: true
-          host: frontend.{{ .Values.global.domain }}
+          hosts:
+            - host: {{ .Values.global.domain }}
+              paths:
+                - path: /
+                  pathType: Prefix
+            - host: www.{{ .Values.global.domain }}
+              paths:
+                - path: /
+                  pathType: Prefix
         
         environment: {{ .Values.global.environment }}
   
