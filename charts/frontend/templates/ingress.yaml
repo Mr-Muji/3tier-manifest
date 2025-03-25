@@ -7,6 +7,12 @@ metadata:
     {{- toYaml .Values.ingress.annotations | nindent 4 }}
 spec:
   ingressClassName: alb
+  # 기본 백엔드 추가
+  defaultBackend:
+    service:
+      name: frontend
+      port:
+        number: {{ .Values.service.port }}
   rules:
     {{- range .Values.ingress.hosts }}
     - host: {{ .host }}

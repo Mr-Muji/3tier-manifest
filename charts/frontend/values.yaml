@@ -27,6 +27,7 @@ ingress:
     alb.ingress.kubernetes.io/target-type: ip
     # External DNS 어노테이션 수정
     external-dns.alpha.kubernetes.io/hostname: mydairy.my,www.mydairy.my
+    # external-dns.alpha.kubernetes.io/hostname: "{{ .Values.ingress.host }}, www.{{ .Values.ingress.host }}"
   hosts:
     - host: mydairy.my
       paths:
