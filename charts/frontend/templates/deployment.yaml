@@ -6,7 +6,9 @@ metadata:
     app: frontend
     env: {{ .Values.environment }}
 spec:
+  {{- if not .Values.autoscaling.enabled }}
   replicas: {{ .Values.replicaCount }}
+  {{- end }}
   selector:
     matchLabels:
       app: frontend
