@@ -18,6 +18,8 @@ ingress:
     alb.ingress.kubernetes.io/scheme: internet-facing
     alb.ingress.kubernetes.io/target-type: ip
     alb.ingress.kubernetes.io/load-balancer-name: tier3-frontend-lb  # 로드밸런서 이름 지정
+    # External DNS 어노테이션 추가
+    external-dns.alpha.kubernetes.io/hostname: mydairy.my
   host: mydairy.my
 
 
