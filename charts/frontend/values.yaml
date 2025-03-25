@@ -1,7 +1,7 @@
 # 프론트엔드 어플리케이션 설정
 image:
-  repository: 183631327456.dkr.ecr.ap-northeast-2.amazonaws.com/3tier-frontend
-  tag: frontend_v1.0_20250325051646
+  repository: 183631327456.dkr.ecr.ap-northeast-2.amazonaws.com/tier3-frontend
+  tag: frontend_v1.0_20250325052736
   pullPolicy: Always
 
 replicaCount: 1
