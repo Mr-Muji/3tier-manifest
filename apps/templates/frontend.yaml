@@ -20,6 +20,8 @@ spec:
         
         ingress:
           enabled: true
+          annotations:
+            external-dns.alpha.kubernetes.io/hostname: {{ .Values.global.domain }},www.{{ .Values.global.domain }}
           hosts:
             - host: {{ .Values.global.domain }}
               paths:
