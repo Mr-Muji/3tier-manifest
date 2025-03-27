@@ -18,6 +18,9 @@ spec:
           repository: {{ .Values.global.repositories.frontend }}
           tag: latest
         
+        global:
+          domain: {{ .Values.global.domain }}
+        
         ingress:
           enabled: true
           annotations:
@@ -31,6 +34,10 @@ spec:
               paths:
                 - path: /
                   pathType: Prefix
+        
+        backendService:
+          externalUrl: "https://api.{{ .Values.global.domain }}"
+          internalUrl: "http://backend.backend.svc.cluster.local:8080"
         
         environment: {{ .Values.global.environment }}
   
