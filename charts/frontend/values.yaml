@@ -10,7 +10,7 @@ replicaCount: 1
 autoscaling:
   enabled: true
   minReplicas: 1
-  maxReplicas: 5
+  maxReplicas: 2
   targetCPUUtilizationPercentage: 80
   targetMemoryUtilizationPercentage: 80
 
@@ -47,3 +47,10 @@ resources:
     memory: 128Mi
 
 environment: dev
+
+# 백엔드 서비스 연결 설정
+backendService:
+  # 외부 접근용 URL (브라우저에서 사용)
+  externalUrl: "https://api.mydairy.my"
+  # 내부 접근용 URL (서버 사이드 렌더링 또는 내부 통신)
+  internalUrl: "http://backend.backend.svc.cluster.local:8080"

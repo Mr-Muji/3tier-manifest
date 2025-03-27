@@ -29,3 +29,11 @@ spec:
               name: http
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
+          # 환경 변수 추가 - 내부 통신용 백엔드 URL
+          env:
+            # 브라우저에서 사용할 백엔드 URL (외부 접근용)
+            - name: REACT_APP_API_URL
+              value: {{ .Values.backendService.externalUrl | default (printf "https://api.%s" .Values.global.domain) | quote }}
+            # 서버 사이드 렌더링이나 내부 통신용 백엔드 URL (내부 접근용)
+            - name: BACKEND_SERVICE_URL
+              value: {{ .Values.backendService.internalUrl | quote }}
