@@ -43,6 +43,16 @@ spec:
             - name: DATABASE_URL
               value: {{ .Values.database.connectionString | default (printf "mysql://%s:%s@%s:%d/%s" .Values.database.username .Values.database.password .Values.database.host (int .Values.database.port) .Values.database.name) | quote }}
             
+            # Prisma ORM을 위한 환경 변수
+            - name: PRISMA_LOG_QUERIES
+              value: "1"
+            - name: PRISMA_CLIENT_ENGINE_TYPE
+              value: "binary"
+            - name: PRISMA_GENERATE_DATAPROXY
+              value: "false"
+            - name: PRISMA_SCHEMA_DISABLE_ADVISORY_LOCK
+              value: "true"
+            
             # 개별 DB 연결 정보
             - name: DB_HOST
               value: {{ .Values.database.host | quote }}
@@ -60,9 +70,12 @@ spec:
                 secretKeyRef:
                   name: frontend-db-credentials
                   key: DB_PASSWORD
-                  
+            
             # Blitz.js 특정 환경 변수
             - name: BLITZ_ENV
               value: {{ .Values.environment | quote }}
+            # Prisma 디버깅 및 모니터링 설정
+            - name: PRISMA_QUERY_ENGINE_LIBRARY
+              value: "query-engine"
             - name: NODE_ENV
               value: {{ if eq .Values.environment "dev" }}development{{ else }}production{{ end }}
