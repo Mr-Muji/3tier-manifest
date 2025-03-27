@@ -39,6 +39,16 @@ spec:
           externalUrl: "https://api.{{ .Values.global.domain }}"
           internalUrl: "http://backend.backend.svc.cluster.local:8080"
         
+        # 데이터베이스 연결 정보 추가 (백엔드와 동일한 DB 사용)
+        database:
+          host: {{ .Values.global.database.host }}
+          port: {{ .Values.global.database.port }}
+          name: {{ .Values.global.database.name }}
+          username: {{ .Values.global.database.username }}
+          password: {{ .Values.global.database.password }}
+          # Prisma/Blitz 형식의 연결 문자열 생성
+          connectionString: "mysql://{{ .Values.global.database.username }}:{{ .Values.global.database.password }}@{{ .Values.global.database.host }}:{{ .Values.global.database.port }}/{{ .Values.global.database.name }}"
+        
         environment: {{ .Values.global.environment }}
   
   destination:
