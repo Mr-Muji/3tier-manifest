@@ -6,6 +6,7 @@ metadata:
     app: frontend
     env: {{ .Values.environment }}
 spec:
+  revisionHistoryLimit: 3  # 최대 3개의 레플리카셋만 유지
   {{- if not .Values.autoscaling.enabled }}
   replicas: {{ .Values.replicaCount }}
   {{- end }}
@@ -27,7 +28,21 @@ spec:
           args:
             - |
               echo "Prisma 마이그레이션 시작..."
-              npx prisma migrate deploy
+              # 스키마 파일 위치 확인
+              if [ -f "./prisma/schema.prisma" ]; then
+                SCHEMA_PATH="./prisma/schema.prisma"
+                echo "스키마 파일 경로: $SCHEMA_PATH"
+              elif [ -f "./db/schema.prisma" ]; then
+                SCHEMA_PATH="./db/schema.prisma"
+                echo "스키마 파일 경로: $SCHEMA_PATH"
+              else
+                echo "오류: prisma 스키마 파일을 찾을 수 없습니다."
+                find . -name "schema.prisma" || echo "schema.prisma 파일이 없습니다."
+                exit 1
+              fi
+              
+              # 마이그레이션 실행 (오류 시 실패)
+              npx prisma migrate deploy --schema=$SCHEMA_PATH || { echo "마이그레이션 실패"; exit 1; }
               echo "Prisma 마이그레이션 완료!"
           env:
             - name: DATABASE_URL
