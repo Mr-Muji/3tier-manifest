@@ -20,6 +20,18 @@ spec:
         # 이 주석이 변경될 때마다 Pod가 재시작됩니다
         kubectl.kubernetes.io/restartedAt: {{ now | quote }}
     spec:
+      initContainers:
+        - name: prisma-migrate
+          image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
+          command: ["/bin/sh", "-c"]
+          args:
+            - |
+              echo "Prisma 마이그레이션 시작..."
+              npx prisma migrate deploy
+              echo "Prisma 마이그레이션 완료!"
+          env:
+            - name: DATABASE_URL
+              value: {{ .Values.database.connectionString | default (printf "mysql://%s:%s@%s:%d/%s" .Values.database.username .Values.database.password .Values.database.host (int .Values.database.port) .Values.database.name) | quote }}
       containers:
         - name: frontend
           image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
